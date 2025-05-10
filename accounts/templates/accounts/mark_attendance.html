@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Mark Daily Attendance{% endblock %}
+
+{% block content %}
+<div style="display: flex; min-height: 100vh; background-color: #fff3b0;">
+
+    <!-- Static Sidebar -->
+    <div id="sidebar" style="width: 250px; height: 100%; background-color: #2f4f4f; padding: 30px; color: white; position: fixed; overflow-x: hidden; display: flex; flex-direction: column;">
+        <h3 style="margin-bottom: 20px; text-align: center;">Staff Dashboard</h3>
+        <ul style="list-style-type: none; padding: 0; text-align: center; display: block;">
+            <li><a href="{% url 'staff_dashboard' %}" style="color: white; text-decoration: none; font-size: 18px;">Home</a></li>
+            <li><a href="{% url 'schedule_list' %}" style="color: white; text-decoration: none; font-size: 18px;">Manage Schedule</a></li>
+            <li><a href="{% url 'mark_attendance' %}" style="color: white; text-decoration: none; font-size: 18px;">Mark Attendance</a></li>
+            <li><a href="{% url 'attendance_report' 'daily' %}" style="color: white; text-decoration: none; font-size: 18px;">Attendance Report</a></li>
+            <li><a href="{% url 'create_mealplan' %}" style="color: white; text-decoration: none; font-size: 18px;">Create Meal Plan</a></li>
+            <li><a href="{% url 'view_mealplan' mealplan_id=1 %}" style="color: white; text-decoration: none; font-size: 18px;">View Meal Plan</a></li>
+            <li><a href="{% url 'record_health_incident' %}" style="color: white; text-decoration: none; font-size: 18px;">Record Health Incident</a></li>
+            <li><a href="{% url 'record_medication' %}" style="color: white; text-decoration: none; font-size: 18px;">Record Medication</a></li>
+            <li><a href="{% url 'emergency_contacts' %}" style="color: white; text-decoration: none;">Emergency Contacts</a></li>
+            <li><a href="{% url 'view_feedback' %}" style="color: white; text-decoration: none;">View Parent Feedback</a></li>
+            <li><a href="{% url 'add_milestone' %}" style="color: white; text-decoration: none;">Add Milestone</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" style="flex-grow: 1; padding: 40px; background-color: #fff3b0; border-radius: 10px; margin-left: 250px;">
+
+        <!-- Welcome Message -->
+        <h2 style="color: #4a4a4a; font-size: 28px;">Mark Daily Attendance</h2>
+
+        <!-- Attendance Form -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" style="padding: 10px 20px; font-size: 16px; border-radius: 8px; background-color: #2f4f4f; color: white; cursor: pointer; border: none;">
+                Submit
+            </button>
+        </form>
+
+        <p style="margin-top: 20px;">
+            <a href="{% url 'staff_dashboard' %}" style="font-size: 16px; color: #333;">&larr; Back to Home</a>
+        </p>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Staff Registration Successful{% endblock %}
+
+{% block content %}
+<div class="edit-wrapper">
+    <div class="edit-form-container">
+        <h2>Staff Registered Successfully!</h2>
+        <p><strong>Username:</strong> {{ username }}</p>
+        <p><strong>Password:</strong> {{ password }}</p>
+
+        <p style="color: red;">Please note down the password. It will not be shown again!</p>
+
+        <div style="margin-top: 20px;">
+            <a href="{% url 'admin_dashboard' %}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

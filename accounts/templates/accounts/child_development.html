@@ -1,0 +1,47 @@
+{% extends 'accounts/parent_dashboard.html' %}
+{% block dashboard_content %}
+<h2>Child Development Tracking</h2>
+
+{% for child in children %}
+<div class="child-section">
+    <h3>{{ child.name }} (Age {{ child.age }})</h3>
+    
+    <div class="development-columns">
+        <div class="milestones">
+            <h4>Recent Milestones</h4>
+            {% for milestone in child.milestones.all|slice:":5" %}
+            <div class="milestone-card">
+                <div class="milestone-header">
+                    <span class="category {{ milestone.category }}">{{ milestone.get_category_display }}</span>
+                    <span class="date">{{ milestone.date_achieved }}</span>
+                </div>
+                <p>{{ milestone.description }}</p>
+            </div>
+            {% empty %}
+            <p>No milestones recorded yet</p>
+            {% endfor %}
+        </div>
+
+        <!-- <div class="activities">
+            <h4>Recent Activities</h4>
+            {% for activity in child.activities.all|slice:":5" %}
+            <div class="activity-card">
+                <div class="activity-header">
+                    <span class="activity-type">{{ activity.activity_type }}</span>
+                    <span class="duration">{{ activity.duration }} mins</span>
+                </div>
+                <div class="skills">{{ activity.skills_developed }}</div>
+                {% if activity.notes %}
+                <div class="notes">{{ activity.notes }}</div>
+                {% endif %}
+            </div>
+            {% empty %}
+            <p>No activities recorded yet</p>
+            {% endfor %}
+        </div> -->
+    </div>
+</div>
+{% empty %}
+<p>No children registered</p>
+{% endfor %}
+{% endblock %}
