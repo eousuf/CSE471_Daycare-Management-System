@@ -1,0 +1,43 @@
+{% extends 'accounts/parent_dashboard.html' %}
+
+{% block dashboard_content %}
+<h2>Schedule for Your Children</h2>
+<form method="get" style="margin-bottom: 20px;">
+  <label for="sort">Sort by:</label>
+  <select name="sort" id="sort" onchange="this.form.submit()">
+      <option value="child_name" {% if sort_by == 'child_name' %}selected{% endif %}>Child Name</option>
+      <option value="group" {% if sort_by == 'group' %}selected{% endif %}>Group</option>
+      <option value="activity" {% if sort_by == 'activity' %}selected{% endif %}>Activity</option>
+      <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time</option>
+      <option value="date" {% if sort_by == 'date' %}selected{% endif %}>Date</option>
+  </select>
+</form>
+{% if schedule_data %}
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+        <thead style="background-color: #eee;">
+            <tr>
+                <th>Child Name</th>
+                <th>Group</th>
+                <th>Activity</th>
+                <th>Time</th>
+                <th>Date</th>
+                <th>Evaluation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in schedule_data %}
+                <tr>
+                    <td>{{ entry.child_name }}</td>
+                    <td>{{ entry.group }}</td>
+                    <td>{{ entry.activity }}</td>
+                    <td>{{ entry.time|time:"g:i a" }}</td>
+                    <td>{{ entry.date|date:"F d, Y" }}</td>
+                    <td>{{ entry.evaluation|default:"Not yet evaluated" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No schedule available for your children yet.</p>
+{% endif %}
+{% endblock %}

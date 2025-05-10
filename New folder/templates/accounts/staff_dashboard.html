@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="display: flex; min-height: 100vh; background-color: #fff3b0;">
+
+    <!-- Static Sidebar -->
+    <div id="sidebar" style="width: 250px; height: 100%; background-color: #2f4f4f; padding: 30px; color: white; position: fixed; overflow-x: hidden; display: flex; flex-direction: column;">
+        <h3 style="margin-bottom: 20px; text-align: center;">Staff Dashboard</h3>
+        <ul style="list-style-type: none; padding: 0; text-align: center; display: block;">
+            <li><a href="{% url 'staff_dashboard' %}" style="color: white; text-decoration: none; font-size: 18px;">Home</a></li>
+            <li><a href="{% url 'schedule_list' %}" style="color: white; text-decoration: none; font-size: 18px;">Manage Schedule</a></li>
+            <li><a href="{% url 'mark_attendance' %}" style="color: white; text-decoration: none; font-size: 18px;">Mark Attendance</a></li>
+            <li><a href="{% url 'attendance_report' 'daily' %}" style="color: white; text-decoration: none; font-size: 18px;">Attendance Report</a></li>
+            <li><a href="{% url 'create_mealplan' %}" style="color: white; text-decoration: none; font-size: 18px;">Create Meal Plan</a></li>
+            <li><a href="{% url 'view_mealplan' mealplan_id=1 %}" style="color: white; text-decoration: none; font-size: 18px;">View Meal Plan</a></li>
+            <li><a href="{% url 'record_health_incident' %}" style="color: white; text-decoration: none; font-size: 18px;">Record Health Incident</a></li>
+            <li><a href="{% url 'record_medication' %}" style="color: white; text-decoration: none; font-size: 18px;">Record Medication</a></li>
+            <li><a href="{% url 'emergency_contacts' %}" style="color: white; text-decoration: none;">Emergency Contacts</a></li>
+            <li><a href="{% url 'view_feedback' %}" style="color: white; text-decoration: none;">View Parent Feedback</a></li>
+            <li><a href="{% url 'add_milestone' %}" style="color: white; text-decoration: none;">Add Milestone</a></li>
+            
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" style="flex-grow: 1; padding: 40px; background-color: #fff3b0; border-radius: 10px; margin-left: 250px;">
+
+        <!-- Welcome Message -->
+        <h2 style="color: #4a4a4a; font-size: 28px;">Welcome, {{ user.first_name }}!</h2>
+
+        <!-- Month Selection Form -->
+        <form method="get" style="margin-bottom: 20px; text-align: center;">
+            <label for="month" style="font-size: 16px; color: #333;">Select Month:</label>
+            <select name="month" id="month" onchange="this.form.submit()" style="padding: 8px 15px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd;">
+                <option value="1" {% if month == 1 %}selected{% endif %}>January</option>
+                <option value="2" {% if month == 2 %}selected{% endif %}>February</option>
+                <option value="3" {% if month == 3 %}selected{% endif %}>March</option>
+                <option value="4" {% if month == 4 %}selected{% endif %}>April</option>
+                <option value="5" {% if month == 5 %}selected{% endif %}>May</option>
+                <option value="6" {% if month == 6 %}selected{% endif %}>June</option>
+                <option value="7" {% if month == 7 %}selected{% endif %}>July</option>
+                <option value="8" {% if month == 8 %}selected{% endif %}>August</option>
+                <option value="9" {% if month == 9 %}selected{% endif %}>September</option>
+                <option value="10" {% if month == 10 %}selected{% endif %}>October</option>
+                <option value="11" {% if month == 11 %}selected{% endif %}>November</option>
+                <option value="12" {% if month == 12 %}selected{% endif %}>December</option>
+            </select>
+        </form>
+
+        <!-- Attendance Heatmap Section -->
+        <div class="heatmap-container">
+            <h3 style="font-size: 24px; color: #333;">Daily Attendance Heatmap (Month: {{ month }})</h3>
+            <div class="heatmap-grid">
+                {% for day, percentage in daily_attendance.items %}
+                    <div class="heatmap-cell-container">
+                        <div class="heatmap-day" style="font-size: 14px; font-weight: bold; color: #555;">
+                            Day {{ day }}
+                        </div>
+                        <div class="heatmap-cell" style="background-color: {% if percentage >= 75 %}#32CD32{% elif percentage >= 50 %}#FFD700{% elif percentage >= 25 %}#FFA500{% else %}#FF0000{% endif %};">
+                            <span class="percentage-text">{{ percentage|floatformat:2 }}%</span>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <style>
+            .heatmap-container {
+                margin-top: 30px;
+                text-align: center;
+                padding: 20px;
+                border: 2px solid #ccc;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .heatmap-grid {
+                display: grid;
+                grid-template-columns: repeat(7, 1fr); /* 7 days per row */
+                grid-gap: 10px; 
+                justify-content: center;
+                margin-top: 20px;
+            }
+
+            .heatmap-cell-container {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 0;
+            }
+
+            .heatmap-day {
+                font-size: 14px;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+
+            .heatmap-cell {
+                width: 70px; 
+                height: 70px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 10px;
+                color: white;
+                font-size: 14px;
+                text-align: center;
+                font-weight: bold;
+                border: none; 
+            }
+
+            .percentage-text {
+                font-size: 12px;
+                font-weight: normal;
+            }
+
+            /* Static Sidebar styles */
+            #sidebar {
+                width: 250px;
+                height: 200%;
+                background-color: #2f4f4f;
+                padding: 30px;
+                color: white;
+                position: fixed;
+                overflow-x: hidden;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #sidebar a {
+                text-decoration: none;
+                color: white;
+                font-size: 18px;
+                display: block;
+                margin-bottom: 20px;
+            }
+
+            #mainContent {
+                margin-left: 250px;
+                transition: margin-left 0.3s;
+            }
+
+            #mainContent.sidebar-open {
+                margin-left: 250px;
+            }
+        </style>
+
+        <!-- Sorting and Child Table -->
+        <form method="get" style="margin-bottom: 40px; margin-top: 20px;">
+            <label for="sort" style="font-size: 16px; color: #333;">Sort by:</label>
+            <select name="sort" id="sort" onchange="this.form.submit()" style="padding: 8px 15px; font-size: 16px; border-radius: 8px; border: 1px solid #ddd;">
+                <option value="name" {% if sort_by == 'name' %}selected{% endif %}>Child Name</option>
+                <option value="age" {% if sort_by == 'age' %}selected{% endif %}>Age</option>
+                <option value="group" {% if sort_by == 'group' %}selected{% endif %}>Group</option>
+            </select>
+        </form>
+
+        <h4 style="font-size: 20px; color: #333;">Children Registered in {{ user.daycare.name }}</h4>
+
+        <table border="1" style="width: 100%; border-collapse: collapse;">
+            <thead style="background-color: #f4f4f4;">
+                <tr>
+                    <th>Child Name</th>
+                    <th>Age</th>
+                    <th>Group</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for child in children %}
+                    <tr>
+                        <td>{{ child.name }}</td>
+                        <td>{{ child.age }}</td>
+                        <td>{{ child.group }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No children registered yet.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

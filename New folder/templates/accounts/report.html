@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Attendance Report{% endblock %}
+
+{% block content %}
+<div style="display: flex; min-height: 100vh; background-color: #fff3b0;">
+    <!-- Sidebar -->
+    <div id="sidebar" style="width: 240px; height: 100%; background-color: #2f4f4f; padding: 30px; color: white; position: fixed; transition: 0.3s; overflow-x: hidden; display: flex; flex-direction: column;">
+        <h3 style="margin-bottom: 20px; text-align: center;">Staff Dashboard</h3>
+        <ul style="list-style-type: none; padding: 0; text-align: center; display: block;">
+            <li><a href="{% url 'staff_dashboard' %}" style="color: white; text-decoration: none; font-size: 18px;">Home</a></li>
+            <li><a href="{% url 'schedule_list' %}" style="color: white; text-decoration: none; font-size: 18px;">Manage Schedule</a></li>
+            <li><a href="{% url 'mark_attendance' %}" style="color: white; text-decoration: none; font-size: 18px;">Mark Attendance</a></li>
+            <li><a href="{% url 'attendance_report' 'daily' %}" style="color: white; text-decoration: none; font-size: 18px;">Attendance Report</a></li>
+            <li><a href="{% url 'create_mealplan' %}" style="color: white; text-decoration: none; font-size: 18px;">Create Meal Plan</a></li>
+            <li><a href="{% url 'view_mealplan' mealplan_id=1 %}" style="color: white; text-decoration: none; font-size: 18px;">View Meal Plan</a></li>
+            <li><a href="{% url 'record_health_incident' %}" style="color: white; text-decoration: none; font-size: 18px;">Record Health Incident</a></li>
+            <li><a href="{% url 'record_medication' %}" style="color: white; text-decoration: none; font-size: 18px;">Record Medication</a></li>
+            <li><a href="{% url 'emergency_contacts' %}" style="color: white; text-decoration: none;">Emergency Contacts</a></li>
+            <li><a href="{% url 'view_feedback' %}" style="color: white; text-decoration: none;">View Parent Feedback</a></li>
+            <li><a href="{% url 'add_milestone' %}" style="color: white; text-decoration: none;">Add Milestone</a></li>
+        </ul>
+    </div>
+    <style>
+      #sidebar a {
+                text-decoration: none;
+                color: white;
+                font-size: 18px;
+                display: block;
+                margin-bottom: 20px;}
+    </style>
+    <!-- Main Content -->
+    <div id="mainContent" style="flex-grow: 1; padding: 40px; background-color: #fff3b0; border-radius: 10px; margin-left: 240px;">
+        <h2>Attendance Report ({{ period|capfirst }})</h2>
+
+        {% if attendance %}
+            <table border="1" cellpadding="5" cellspacing="0" style="border-collapse:collapse;">
+                <thead>
+                    <tr>
+                        <th>Child</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Marked By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for rec in attendance %}
+                        <tr>
+                            <td>{{ rec.child}}</td>
+                            <td>{{ rec.date }}</td>
+                            <td>{{ rec.status|capfirst }}</td>
+                            <td>{{ rec.staff.get_full_name|default:rec.staff.username }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>No records found for this period.</p>
+        {% endif %}
+
+        <p>
+            <a href="{% url 'mark_attendance' %}">Mark Attendance</a> |
+            <a href="{% url 'attendance_report' 'daily' %}">Daily</a> |
+            <a href="{% url 'attendance_report' 'weekly' %}">Weekly</a> |
+            <a href="{% url 'attendance_report' 'monthly' %}">Monthly</a>
+        </p>
+        <p>
+            <a href="{% url 'staff_dashboard' %}">&larr; Back to Home</a>
+        </p>
+    </div>
+</div>
+
+{% endblock %}
