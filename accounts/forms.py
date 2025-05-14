@@ -163,6 +163,7 @@ class MilestoneForm(forms.ModelForm):
             self.fields['child'].queryset = Child.objects.filter(
                 daycare=user.staff_profile.daycare
             )
+    
 
 class ActivitySummaryForm(forms.ModelForm):
     class Meta:

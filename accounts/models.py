@@ -275,6 +275,7 @@ class Milestone(models.Model):
     category = models.CharField(max_length=20, choices=CATEGORY_CHOICES)
     description = models.TextField()
     observed_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    
 
     class Meta:
         ordering = ['-date_achieved']
